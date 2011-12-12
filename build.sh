@@ -15,9 +15,13 @@ function download {
    fi 
 }
 
-cd build
 
-# Step 1. Download pear packages for PhpUnit v 3.5.x
+
+# Step 1.
+mkdir -p build/lib
+cd build/
+
+# Step 2. Download pear packages for PhpUnit v 3.5.x
 
 download http://pear.phpunit.de/get/PHPUnit_Selenium-1.0.1.tgz PHPUnit_Selenium-1.0.1.tgz
 download http://pear.phpunit.de/get/PHPUnit_MockObject-1.0.3.tgz PHPUnit_MockObject-1.0.3.tgz
@@ -29,18 +33,15 @@ download http://pear.phpunit.de/get/DbUnit-1.0.0.tgz DbUnit-1.0.0.tgz
 download http://pear.phpunit.de/get/PHPUnit-3.5.15.tgz PHPUnit-3.5.15.tgz
 download http://pear.phpunit.de/get/PHP_TokenStream-1.0.1.tgz PHP_TokenStream-1.0.1.tgz
 
-#git clone git://github.com/symfony/ClassLoader.git symfony/src/Symfony/Component/ClassLoader
-#git clone git://github.com/symfony/Finder.git symfony/src/Symfony/Component/Finder
+# Step 3. Unpack
 
-# Step 2. Unpack
-
-mkdir -p lib
 for i in `ls *.tgz`
 do 
-  tar xf $i -C build/lib/
+  tar xf $i -C lib/
 done
 
 cd ..
 
+# Step 4. Build phar archive 
 php make-phar.php 
 chmod +x phpunit.phar
