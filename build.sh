@@ -15,9 +15,6 @@ function download {
    fi 
 }
 
-cp make-phar.php build/
-cp stub.php build/
-
 cd build
 
 # Step 1. Download pear packages for PhpUnit v 3.5.x
@@ -32,16 +29,18 @@ download http://pear.phpunit.de/get/DbUnit-1.0.0.tgz DbUnit-1.0.0.tgz
 download http://pear.phpunit.de/get/PHPUnit-3.5.15.tgz PHPUnit-3.5.15.tgz
 download http://pear.phpunit.de/get/PHP_TokenStream-1.0.1.tgz PHP_TokenStream-1.0.1.tgz
 
-git clone git://github.com/symfony/ClassLoader.git symfony/src/Symfony/Component/ClassLoader
-git clone git://github.com/symfony/Finder.git symfony/src/Symfony/Component/Finder
+#git clone git://github.com/symfony/ClassLoader.git symfony/src/Symfony/Component/ClassLoader
+#git clone git://github.com/symfony/Finder.git symfony/src/Symfony/Component/Finder
 
 # Step 2. Unpack
 
 mkdir -p lib
 for i in `ls *.tgz`
 do 
-  tar xf $i -C lib/
+  tar xf $i -C build/lib/
 done
+
+cd ..
 
 php make-phar.php 
 chmod +x phpunit.phar

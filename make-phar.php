@@ -27,47 +27,19 @@ $phar->startBuffering();
 $finder = new Symfony\Component\Finder\Finder();
 $finder->files()
     ->ignoreVCS(true)
-#    ->notName('make-phar.php')
-#    ->notName('phpunit.phar')
-#    ->notName('vendors.sh')
     ->notName('package.xml')
     ->notName('package.sig')
-#    ->exclude('symfony')
-#    ->exclude('Tests')
-    ->in(__DIR__.'/lib')
+    ->in(__DIR__.'/build/lib')
 ;
 
 foreach ($finder as $file) {
     $filename = substr((string)$file, strlen(__DIR__.'/'));
-    $phar->addFile($filename);
+    $localFilename =  substr((string)$file, strlen(__DIR__.'/build/'));
+    $phar->addFile($filename, $localFilename);
+    echo $filename  . ' => ' . $localFilename .PHP_EOL;
 }
 
-$phar['_stub.php'] = <<<EOF
-<?php
-
-set_include_path(
-    __DIR__.'/lib/PHPUnit-3.5.15'.PATH_SEPARATOR.
-    __DIR__.'/lib/DbUnit-1.0.0'.PATH_SEPARATOR.
-    __DIR__.'/lib/File_Iterator-1.2.3'.PATH_SEPARATOR.
-    __DIR__.'/lib/Text_Template-1.0.0'.PATH_SEPARATOR.
-    __DIR__.'/lib/PHP_CodeCoverage-1.0.2'.PATH_SEPARATOR.
-    __DIR__.'/lib/PHP_TokenStream-1.0.1'.PATH_SEPARATOR.
-    __DIR__.'/lib/PHP_Timer-1.0.0'.PATH_SEPARATOR.
-    __DIR__.'/lib/PHPUnit_MockObject-1.0.3'.PATH_SEPARATOR.
-    __DIR__.'/lib/PHPUnit_Selenium-1.0.1'.PATH_SEPARATOR.
-#    __DIR__.'/phpunit-story'.PATH_SEPARATOR.
-#    __DIR__.'/php-invoker'.PATH_SEPARATOR.
-    get_include_path()
-);
-
-require 'PHPUnit/Autoload.php';
-
-PHPUnit_TextUI_Command::main();
-
-__HALT_COMPILER();
-EOF;
-
-#$phar->setDefaultStub('_stub.php');
 $phar->setStub(file_get_contents('stub.php'));
 $phar->stopBuffering();
 unset($phar);
+echo "[DONE]" . PHP_EOL;
