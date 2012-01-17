@@ -43,5 +43,5 @@ done
 cd ..
 
 # Step 4. Build phar archive 
-php make-phar.php 
+php -dphar.readonly=0 make-phar.php 
 chmod +x phpunit.phar
